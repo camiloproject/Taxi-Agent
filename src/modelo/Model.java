@@ -58,6 +58,30 @@ public class Model {
                
 
 	}
+        public ArrayList<ArrayList<Integer>> generarPoblacion(){
+            Random rmd = new Random();
+            ArrayList<ArrayList<Integer>> pop = new ArrayList<ArrayList<Integer>>();
+            for(int i=0;i<10;i++){
+                ArrayList<Integer> mov = new ArrayList<Integer>();
+                for (int j=0;j<100;j++){
+                    mov.add(rmd.nextInt(5));
+                }
+                pop.add(mov);
+            }
+            fitness(pop);
+            return pop;
+        }
+        public ArrayList<Double> fitness(ArrayList<ArrayList<Integer>> pop){
+            ArrayList<Double> f = new ArrayList<Double>();
+            for(int i=0;i<pop.size();i++){
+                for(int j=0;i<pop.get(i).size();j++){
+                    int count = 0;
+                    if(pop.get(i).get(j) != 4) count++;
+                }
+              
+            }
+            return f;
+        }
 
 	//The Thread for play
 	public void play(){
@@ -403,7 +427,7 @@ public class Model {
 	}
 
 	public LinkedList<Nodo> getCamino(Nodo initial, Nodo end) {
-            
+                generarPoblacion();
 		LinkedList<Nodo> camino = new LinkedList<Nodo>();
 		if(!initial.equals(end)){
 			Nodo ini = null;
