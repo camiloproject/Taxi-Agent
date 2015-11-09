@@ -27,7 +27,10 @@ public class Model {
 	LinkedList<Pasajero> pasajeros;
 	LinkedList<Nodo> intersections;
 	LinkedList<Thread> threads;
-	
+        ArrayList<ArrayList<Integer>> pop = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> newpop = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Double> Fitness = new ArrayList<Double>(); 
+ 	
 	public Model() {
 		
 		setMatrizMap();
@@ -58,7 +61,56 @@ public class Model {
                
 
 	}
-
+        //Generates a movement population.
+        public void generarPoblacion(){
+            Random rmd = new Random();
+            for(int i=0;i<80;i++){
+                ArrayList<Integer> mov = new ArrayList<Integer>();
+                for (int j=0;j<100;j++){
+                    mov.add(rmd.nextInt(5));
+                }
+                pop.add(mov);
+            }
+        }
+        //Computes the fitness of each chromosome.
+        public ArrayList<Double> fitness(ArrayList<ArrayList<Integer>> pop){
+            for(int i=0;i<pop.size();i++){
+                int count = 0;
+                for(int j=0;i<pop.get(i).size();j++){
+                    if(pop.get(i).get(j) != 4) count++;
+                }
+                Double fit = 1.0/count;
+                Fitness.add(fit);
+            }
+            return Fitness;
+        }
+        //Select the best population with roulette wheel selection
+        public int select(ArrayList<Double> fitness){
+            //Computes the total weigth
+            double peso_suma=0;
+            for(int i=0;i<fitness.size();i++){
+                peso_suma += fitness.get(i);
+            }
+            
+            //Get a random value
+            double valor = (new Random().nextDouble())*peso_suma;
+            
+            //// locate the random value based on the weights
+            for(int i=0; i<fitness.size(); i++) {		
+                valor -= fitness.get(i);		
+                if(valor <= 0) return i;
+            }
+            // only when rounding errors occur
+            return fitness.size() - 1;
+        }
+        
+        //The crossover function.
+        public void crossover(ArrayList<Integer> p1, ArrayList<Integer> p2){
+            Random rnd = new Random();
+            int divisor = rnd.nextInt(p1.size());
+            ArrayList<Integer> p3 = new ArrayList<Integer>();
+            ArrayList<Integer> p4 = new ArrayList<Integer>();
+        }
 	//The Thread for play
 	public void play(){
 		
@@ -403,7 +455,9 @@ public class Model {
 	}
 
 	public LinkedList<Nodo> getCamino(Nodo initial, Nodo end) {
-            
+                generarPoblacion();
+                fitness(pop);
+                select(Fitness);
 		LinkedList<Nodo> camino = new LinkedList<Nodo>();
 		if(!initial.equals(end)){
 			Nodo ini = null;
